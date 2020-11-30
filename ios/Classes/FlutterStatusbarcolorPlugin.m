@@ -10,14 +10,24 @@
             binaryMessenger:[registrar messenger]];
   FlutterStatusbarcolorPlugin* instance = [[FlutterStatusbarcolorPlugin alloc] init];
   [registrar addMethodCallDelegate:instance channel:channel];
+    
+  [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationChanged:)    name:UIDeviceOrientationDidChangeNotification  object:nil];
+}
+
++ (void)detachFromEngineForRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
 }
 
 static NSInteger statusBarViewTag = 38482458385;
 
++ (void)orientationChanged:(NSNotification *)notification{
+    [self updateStatusBarViewConstraints];
+}
+
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
   if ([@"getstatusbarcolor" isEqualToString:call.method]) {
     UIColor *uicolor;
-    UIView * statusBar = [self getStatusBarView];
+    UIView * statusBar = [FlutterStatusbarcolorPlugin getStatusBarView];
     uicolor = statusBar.backgroundColor;
     if(uicolor == nil) {
        // since it's nil default to transparent
@@ -38,7 +48,7 @@ static NSInteger statusBarViewTag = 38482458385;
     result(color);
   } else if ([@"setstatusbarcolor" isEqualToString:call.method]) {
     NSNumber *color = call.arguments[@"color"];
-    UIView * statusBar = [self getStatusBarView];
+    UIView * statusBar = [FlutterStatusbarcolorPlugin getStatusBarView];
     int colors = [color intValue];
     statusBar.backgroundColor = ANDROID_COLOR(colors);
     result(nil);
@@ -65,23 +75,46 @@ static NSInteger statusBarViewTag = 38482458385;
   }
 }
 
-- (UIView*) getStatusBarView {
++ (UIView*) getStatusBarView {
    if (@available(iOS 13, *)) {
        if([UIApplication sharedApplication].keyWindow != nil &&
            [[UIApplication sharedApplication].keyWindow viewWithTag:statusBarViewTag] != nil) {
            return [[UIApplication sharedApplication].keyWindow viewWithTag:statusBarViewTag];
        }
        else {
-           UIView* statusBar = [[UIView alloc]initWithFrame:[UIApplication sharedApplication].keyWindow.windowScene.statusBarManager.statusBarFrame];
+           UIApplication* app = [UIApplication sharedApplication];
+           UIView* view = app.keyWindow;
+           
+           UIView* statusBar = [[UIView alloc] init];
+           [view addSubview:statusBar];
            statusBar.tag = statusBarViewTag;
-           [[UIApplication sharedApplication].keyWindow addSubview:statusBar];
+           statusBar.translatesAutoresizingMaskIntoConstraints = NO;
+           
+           [self updateStatusBarViewConstraints];
            return statusBar;
        }
    }
    else {
        return [[UIApplication sharedApplication] valueForKey:@"statusBar"];
    }
-    
+}
+
++ (void) updateStatusBarViewConstraints {
+    UIView* statusBar = [self getStatusBarView];
+    if(statusBar) {
+        if(@available(iOS 13.0, *)) {
+            UIApplication* app = [UIApplication sharedApplication];
+            CGRect frame = app.keyWindow.windowScene.statusBarManager.statusBarFrame;
+            UIView* view = app.keyWindow;
+            
+            [statusBar removeConstraints:statusBar.constraints];
+            
+            [statusBar.heightAnchor constraintEqualToConstant:frame.size.height].active = YES;
+            [statusBar.widthAnchor constraintEqualToAnchor:view.widthAnchor multiplier:1.0].active = YES;
+            [statusBar.topAnchor constraintEqualToAnchor:view.topAnchor].active = YES;
+            [statusBar.centerXAnchor constraintEqualToAnchor:view.centerXAnchor].active = YES;
+        }
+    }
 }
 
 @end

@@ -7,4 +7,5 @@ build/
 ios/.generated/
 packages
 pubspec.lock
+.dart_tool/
 flutter_export_environment.sh

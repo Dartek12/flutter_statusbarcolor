@@ -87,176 +87,183 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           ),
           body: TabBarView(
             children: <Widget>[
-              Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Builder(builder: (BuildContext context) {
-                    return FlatButton(
-                      onPressed: () => FlutterStatusbarcolor.getStatusBarColor()
-                          .then((Color color) {
-                        Scaffold.of(context).showSnackBar(SnackBar(
-                          content: Text(color.toString()),
-                          backgroundColor: color,
-                          duration: const Duration(milliseconds: 200),
-                        ));
-                      }),
-                      child: Text(
-                        'Show Statusbar Color',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      color: Colors.black,
-                    );
-                  }),
-                  Padding(padding: const EdgeInsets.all(10.0)),
-                  FlatButton(
-                    onPressed: () => changeStatusColor(Colors.transparent),
-                    child: Text('Transparent'),
-                  ),
-                  Padding(padding: const EdgeInsets.all(10.0)),
-                  FlatButton(
-                    onPressed: () {
-                      Color color = Colors.amberAccent;
-                      changeStatusColor(color);
-                    },
-                    child: Text('amber-accent'),
-                    color: Colors.amberAccent,
-                  ),
-                  Padding(padding: const EdgeInsets.all(10.0)),
-                  FlatButton(
-                    onPressed: () => changeStatusColor(Colors.tealAccent),
-                    child: Text('teal-accent'),
-                    color: Colors.tealAccent,
-                  ),
-                  Padding(padding: const EdgeInsets.all(10.0)),
-                  FlatButton(
-                    onPressed: () =>
-                        FlutterStatusbarcolor.setStatusBarWhiteForeground(true)
-                            .then((_) => _useWhiteStatusBarForeground = true),
-                    child: Text(
-                      'light foreground',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    color: Colors.black,
-                  ),
-                  Padding(padding: const EdgeInsets.all(10.0)),
-                  FlatButton(
-                    onPressed: () =>
-                        FlutterStatusbarcolor.setStatusBarWhiteForeground(false)
-                            .then((_) => _useWhiteStatusBarForeground = false),
-                    child: Text('dark foreground'),
-                    color: Colors.white,
-                  ),
-                  Padding(padding: const EdgeInsets.all(10.0)),
-                  FlatButton(
-                    onPressed: () {
-                      Random rnd = Random();
-                      Color color = Color.fromARGB(
-                        255,
-                        rnd.nextInt(255),
-                        rnd.nextInt(255),
-                        rnd.nextInt(255),
+              SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Builder(builder: (BuildContext context) {
+                      return FlatButton(
+                        onPressed: () =>
+                            FlutterStatusbarcolor.getStatusBarColor()
+                                .then((Color color) {
+                          Scaffold.of(context).showSnackBar(SnackBar(
+                            content: Text(color.toString()),
+                            backgroundColor: color,
+                            duration: const Duration(milliseconds: 200),
+                          ));
+                        }),
+                        child: Text(
+                          'Show Statusbar Color',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        color: Colors.black,
                       );
-                      changeStatusColor(color);
-                      setState(() => _randomStatusColor = color);
-                    },
-                    child: Text(
-                      'Random color',
-                      style: TextStyle(
-                        color: useWhiteForeground(_randomStatusColor)
-                            ? Colors.white
-                            : Colors.black,
-                      ),
+                    }),
+                    Padding(padding: const EdgeInsets.all(10.0)),
+                    FlatButton(
+                      onPressed: () => changeStatusColor(Colors.transparent),
+                      child: Text('Transparent'),
                     ),
-                    color: _randomStatusColor,
-                  ),
-                ],
-              ),
-              Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Builder(builder: (BuildContext context) {
-                    return FlatButton(
+                    Padding(padding: const EdgeInsets.all(10.0)),
+                    FlatButton(
+                      onPressed: () {
+                        Color color = Colors.amberAccent;
+                        changeStatusColor(color);
+                      },
+                      child: Text('amber-accent'),
+                      color: Colors.amberAccent,
+                    ),
+                    Padding(padding: const EdgeInsets.all(10.0)),
+                    FlatButton(
+                      onPressed: () => changeStatusColor(Colors.tealAccent),
+                      child: Text('teal-accent'),
+                      color: Colors.tealAccent,
+                    ),
+                    Padding(padding: const EdgeInsets.all(10.0)),
+                    FlatButton(
                       onPressed: () =>
-                          FlutterStatusbarcolor.getNavigationBarColor()
-                              .then((Color color) {
-                        Scaffold.of(context).showSnackBar(SnackBar(
-                          content: Text(color.toString()),
-                          backgroundColor: color,
-                          duration: const Duration(milliseconds: 200),
-                        ));
-                      }),
+                          FlutterStatusbarcolor.setStatusBarWhiteForeground(
+                                  true)
+                              .then((_) => _useWhiteStatusBarForeground = true),
                       child: Text(
-                        'Show Navigationbar Color',
+                        'light foreground',
                         style: TextStyle(color: Colors.white),
                       ),
                       color: Colors.black,
-                    );
-                  }),
-                  Padding(padding: const EdgeInsets.all(10.0)),
-                  FlatButton(
-                    onPressed: () => changeNavigationColor(Colors.green[400]),
-                    child: Text('Green-400'),
-                    color: Colors.green[400],
-                  ),
-                  Padding(padding: const EdgeInsets.all(10.0)),
-                  FlatButton(
-                    onPressed: () =>
-                        changeNavigationColor(Colors.lightBlue[100]),
-                    child: Text('LightBlue-100'),
-                    color: Colors.lightBlue[100],
-                  ),
-                  Padding(padding: const EdgeInsets.all(10.0)),
-                  FlatButton(
-                    onPressed: () =>
-                        changeNavigationColor(Colors.cyanAccent[200]),
-                    child: Text('CyanAccent-200'),
-                    color: Colors.cyanAccent[200],
-                  ),
-                  Padding(padding: const EdgeInsets.all(10.0)),
-                  FlatButton(
-                    onPressed: () => FlutterStatusbarcolor
-                            .setNavigationBarWhiteForeground(true)
-                        .then((_) => _useWhiteNavigationBarForeground = true),
-                    child: Text(
-                      'light foreground',
-                      style: TextStyle(color: Colors.white),
                     ),
-                    color: Colors.black,
-                  ),
-                  Padding(padding: const EdgeInsets.all(10.0)),
-                  FlatButton(
-                    onPressed: () => FlutterStatusbarcolor
-                            .setNavigationBarWhiteForeground(false)
-                        .then((_) => _useWhiteNavigationBarForeground = false),
-                    child: Text('dark foreground'),
-                    color: Colors.white,
-                  ),
-                  Padding(padding: const EdgeInsets.all(10.0)),
-                  FlatButton(
-                    onPressed: () {
-                      Random rnd = Random();
-                      Color color = Color.fromARGB(
-                        255,
-                        rnd.nextInt(255),
-                        rnd.nextInt(255),
-                        rnd.nextInt(255),
-                      );
-                      setState(() => _randomNavigationColor = color);
-                      changeNavigationColor(color);
-                    },
-                    child: Text(
-                      'Random color',
-                      style: TextStyle(
-                        color: useWhiteForeground(_randomNavigationColor)
-                            ? Colors.white
-                            : Colors.black,
+                    Padding(padding: const EdgeInsets.all(10.0)),
+                    FlatButton(
+                      onPressed: () => FlutterStatusbarcolor
+                              .setStatusBarWhiteForeground(false)
+                          .then((_) => _useWhiteStatusBarForeground = false),
+                      child: Text('dark foreground'),
+                      color: Colors.white,
+                    ),
+                    Padding(padding: const EdgeInsets.all(10.0)),
+                    FlatButton(
+                      onPressed: () {
+                        Random rnd = Random();
+                        Color color = Color.fromARGB(
+                          255,
+                          rnd.nextInt(255),
+                          rnd.nextInt(255),
+                          rnd.nextInt(255),
+                        );
+                        changeStatusColor(color);
+                        setState(() => _randomStatusColor = color);
+                      },
+                      child: Text(
+                        'Random color',
+                        style: TextStyle(
+                          color: useWhiteForeground(_randomStatusColor)
+                              ? Colors.white
+                              : Colors.black,
+                        ),
                       ),
+                      color: _randomStatusColor,
                     ),
-                    color: _randomNavigationColor,
-                  ),
-                ],
+                  ],
+                ),
+              ),
+              SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Builder(builder: (BuildContext context) {
+                      return FlatButton(
+                        onPressed: () =>
+                            FlutterStatusbarcolor.getNavigationBarColor()
+                                .then((Color color) {
+                          Scaffold.of(context).showSnackBar(SnackBar(
+                            content: Text(color.toString()),
+                            backgroundColor: color,
+                            duration: const Duration(milliseconds: 200),
+                          ));
+                        }),
+                        child: Text(
+                          'Show Navigationbar Color',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        color: Colors.black,
+                      );
+                    }),
+                    Padding(padding: const EdgeInsets.all(10.0)),
+                    FlatButton(
+                      onPressed: () => changeNavigationColor(Colors.green[400]),
+                      child: Text('Green-400'),
+                      color: Colors.green[400],
+                    ),
+                    Padding(padding: const EdgeInsets.all(10.0)),
+                    FlatButton(
+                      onPressed: () =>
+                          changeNavigationColor(Colors.lightBlue[100]),
+                      child: Text('LightBlue-100'),
+                      color: Colors.lightBlue[100],
+                    ),
+                    Padding(padding: const EdgeInsets.all(10.0)),
+                    FlatButton(
+                      onPressed: () =>
+                          changeNavigationColor(Colors.cyanAccent[200]),
+                      child: Text('CyanAccent-200'),
+                      color: Colors.cyanAccent[200],
+                    ),
+                    Padding(padding: const EdgeInsets.all(10.0)),
+                    FlatButton(
+                      onPressed: () => FlutterStatusbarcolor
+                              .setNavigationBarWhiteForeground(true)
+                          .then((_) => _useWhiteNavigationBarForeground = true),
+                      child: Text(
+                        'light foreground',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      color: Colors.black,
+                    ),
+                    Padding(padding: const EdgeInsets.all(10.0)),
+                    FlatButton(
+                      onPressed: () => FlutterStatusbarcolor
+                              .setNavigationBarWhiteForeground(false)
+                          .then(
+                              (_) => _useWhiteNavigationBarForeground = false),
+                      child: Text('dark foreground'),
+                      color: Colors.white,
+                    ),
+                    Padding(padding: const EdgeInsets.all(10.0)),
+                    FlatButton(
+                      onPressed: () {
+                        Random rnd = Random();
+                        Color color = Color.fromARGB(
+                          255,
+                          rnd.nextInt(255),
+                          rnd.nextInt(255),
+                          rnd.nextInt(255),
+                        );
+                        setState(() => _randomNavigationColor = color);
+                        changeNavigationColor(color);
+                      },
+                      child: Text(
+                        'Random color',
+                        style: TextStyle(
+                          color: useWhiteForeground(_randomNavigationColor)
+                              ? Colors.white
+                              : Colors.black,
+                        ),
+                      ),
+                      color: _randomNavigationColor,
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
